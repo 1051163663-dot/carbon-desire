@@ -1,1 +1,1 @@
-{"name": "CARBON//DESIRE V18", "short_name": "C//D V18", "start_url": "./index.html?v=18", "scope": "./", "display": "standalone", "background_color": "#0b0710", "theme_color": "#e996af", "orientation": "landscape", "icons": [{"src": "icon.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable"}]}
+{"name": "CARBON//DESIRE 20", "short_name": "C//D 20", "start_url": "./index.html?v=20", "display": "standalone", "background_color": "#09070d", "theme_color": "#120d19", "orientation": "landscape"}
