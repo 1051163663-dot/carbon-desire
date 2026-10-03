@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#120d19"><title>CARBON//DESIRE 21</title>
+<meta name="theme-color" content="#120d19"><title>CARBON//DESIRE 22</title>
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#09070d;color:#fff;font-family:ui-monospace,Menlo,monospace;touch-action:manipulation}
 #game{position:relative;width:100vw;height:100dvh;background:#111;overflow:hidden}
@@ -8,8 +8,12 @@
 #home{background-image:url('v20_pixel_world.png')}
 #badge{position:absolute;left:2.2%;top:2%;font-weight:900;font-size:clamp(17px,3vw,42px);text-shadow:3px 3px #000;pointer-events:none}.pink{color:#ff5d9e}
 #hud{position:absolute;right:2%;top:2%;display:flex;gap:8px}.chip{background:#0b0b12dc;border:2px solid #9b829e;border-radius:8px;padding:7px 10px;font-weight:800}
-.hot{position:absolute;border:0;background:transparent;filter:drop-shadow(0 0 0 transparent)}.hot:active{background:#ff4f9b33;outline:3px solid #ff6ca9;border-radius:12px}
-#phoneHot{left:35%;top:57%;width:10%;height:12%}#pcHot{left:48%;top:45%;width:13%;height:18%}#doorHot{left:69%;top:18%;width:10%;height:37%}#dsHot{left:20%;top:57%;width:13%;height:14%}#bedHot{left:4%;top:34%;width:25%;height:24%}
+.hot{position:absolute;z-index:12;cursor:pointer;border:0;background:transparent;filter:drop-shadow(0 0 0 transparent)}.hot:active{background:#ff4f9b33;outline:3px solid #ff6ca9;border-radius:12px}
+#phoneHot{left:32%;top:51%;width:15%;height:19%}
+#pcHot{left:45%;top:38%;width:20%;height:28%}
+#doorHot{left:66%;top:12%;width:16%;height:47%}
+#dsHot{left:17%;top:52%;width:17%;height:18%}
+#bedHot{left:2%;top:29%;width:29%;height:31%}
 .sheet{position:absolute;inset:0;background:#090711ee;display:none;align-items:center;justify-content:center;padding:2.5%}.sheet.on{display:flex}
 .panel{width:min(1180px,96vw);height:min(760px,94vh);background:#16111e;border:4px solid #ff6aa8;border-radius:14px;box-shadow:0 0 0 4px #0b0710,0 0 35px #ff3d8a66;overflow:auto;padding:14px}
 .top{display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#16111ef2;z-index:5;padding:4px}.close{font-size:28px;background:#2a2032;color:white;border:2px solid #fff;border-radius:7px;padding:4px 13px}
@@ -25,14 +29,23 @@
 .replyTray{display:grid;grid-template-columns:1fr;gap:9px;margin-top:18px}.reply{min-height:54px;text-align:left;background:#17131d;color:#fff;border:3px solid #76667e;border-radius:10px;padding:10px 13px;font-size:16px}.reply:active{border-color:#ff5d9e;background:#291825}
 .effectPic{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}.effectPic img{width:100%;aspect-ratio:1.5;object-fit:cover;border:3px solid #5e5265;border-radius:9px}
 .badgeDot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#ff5d9e;margin-left:6px}
+
+#quick22{position:absolute;left:2%;bottom:2%;z-index:15;display:flex;gap:9px}
+#quick22 button{width:74px;height:58px;padding:0;border:3px solid #fff;border-radius:9px;overflow:hidden;background:#111}
+#quick22 img{width:100%;height:100%;object-fit:cover;display:block}
+#quick22 button:active{border-color:#ff5d9e;transform:scale(.96)}
 </style></head><body><div id="game">
-<div id="home" class="scene"></div><div id="badge"><span class="pink">CARBON</span>//DESIRE <span class="pink">21</span></div>
-<div id="hud"><div class="chip">DAY <span id="day">1</span></div><div class="chip" id="clock">09:17</div><div class="chip">¥ <span id="money">8560</span></div></div>
+<div id="home" class="scene"></div><div id="badge"><span class="pink">CARBON</span>//DESIRE <span class="pink">22</span></div>
+<div id="quick22">
+<button aria-label="手机" id="qPhone"><img src="scene_phone.jpg"></button>
+<button aria-label="电脑" id="qPC"><img src="v17_company.jpg"></button>
+<button aria-label="公司" id="qCompany"><img src="v17_company_thumb.jpg"></button>
+</div><div id="hud"><div class="chip">DAY <span id="day">1</span></div><div class="chip" id="clock">09:17</div><div class="chip">¥ <span id="money">8560</span></div></div>
 <button class="hot" id="bedHot" aria-label="bed"></button><button class="hot" id="dsHot" aria-label="3ds"></button><button class="hot" id="phoneHot" aria-label="phone"></button><button class="hot" id="pcHot" aria-label="computer"></button><button class="hot" id="doorHot" aria-label="door"></button>
 <div id="sheet" class="sheet"><div class="panel"><div class="top"><h2 id="pt">MAP</h2><button class="close" onclick="closeP()">×</button></div><div id="content"></div></div></div><div id="toast"></div></div>
 <script>
-const $=x=>document.getElementById(x);let S=JSON.parse(localStorage.getItem('cd21')||'{"day":1,"min":557,"money":8560,"mood":62,"skill":1,"trust":{"khalid":0,"ren":0,"ayo":0},"biz":{"fitment":0,"stock":0,"promise":0},"msg":{"khalid":0,"ren":0,"ayo":0},"flags":{}}');
-function save(){localStorage.setItem('cd21',JSON.stringify(S));drawHud()}function drawHud(){day.textContent=S.day;let h=Math.floor(S.min/60)%24,m=S.min%60;clock.textContent=String(h).padStart(2,'0')+":"+String(m).padStart(2,'0');money.textContent=S.money}
+const $=x=>document.getElementById(x);let S=JSON.parse(localStorage.getItem('cd22')||'{"day":1,"min":557,"money":8560,"mood":62,"skill":1,"trust":{"khalid":0,"ren":0,"ayo":0},"biz":{"fitment":0,"stock":0,"promise":0},"msg":{"khalid":0,"ren":0,"ayo":0},"flags":{}}');
+function save(){localStorage.setItem('cd22',JSON.stringify(S));drawHud()}function drawHud(){day.textContent=S.day;let h=Math.floor(S.min/60)%24,m=S.min%60;clock.textContent=String(h).padStart(2,'0')+":"+String(m).padStart(2,'0');money.textContent=S.money}
 function tick(n){S.min+=n;if(S.min>=1440){S.day++;S.min%=1440}save()}function toast(t){let x=$('toast');x.textContent=t;x.style.display='block';setTimeout(()=>x.style.display='none',1100)}
 function panel(title,body){pt.textContent=title;content.innerHTML=body;sheet.classList.add('on')}function closeP(){sheet.classList.remove('on')}
 const places=[
@@ -97,5 +110,12 @@ function consequence21(){
  panel('今天留下的痕迹',`<div class="grid">${cards.map(x=>`<div class="tile"><img src="${x[0]}"><b>${x[1]}</b></div>`).join('')}</div>`)
 }
 
-bedHot.onclick=()=>{tick(480);toast('Zzz…')};dsHot.onclick=()=>{tick(30);S.mood=Math.min(100,S.mood+6);save();gallery('3DS · +心情',['scene_home.jpg','v17_home.jpg'])};phoneHot.onclick=phone;pcHot.onclick=pc;doorHot.onclick=map;drawHud();
+
+qPhone.addEventListener('click',phone);
+qPC.addEventListener('click',pc);
+qCompany.addEventListener('click',company);
+
+bedHot.onclick=()=>{tick(480);toast('Zzz…')};dsHot.onclick=()=>{tick(30);S.mood=Math.min(100,S.mood+6);save();gallery('3DS · +心情',['scene_home.jpg','v17_home.jpg'])};phoneHot.onclick=()=>{phone()};
+pcHot.onclick=()=>{pc()};
+doorHot.onclick=()=>{map()};drawHud();
 </script></body></html>
