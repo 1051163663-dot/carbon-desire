@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#120d19"><title>CARBON//DESIRE 20</title>
+<meta name="theme-color" content="#120d19"><title>CARBON//DESIRE 21</title>
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#09070d;color:#fff;font-family:ui-monospace,Menlo,monospace;touch-action:manipulation}
 #game{position:relative;width:100vw;height:100dvh;background:#111;overflow:hidden}
@@ -20,14 +20,19 @@
 .flash{animation:pop .45s}@keyframes pop{50%{filter:brightness(2) saturate(2);transform:scale(1.03)}}
 #toast{position:absolute;left:50%;bottom:5%;transform:translateX(-50%);background:#0a0810e8;border:3px solid #ff5d9e;border-radius:8px;padding:10px 16px;font-size:18px;font-weight:900;display:none;z-index:30}
 @media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}.tile{min-height:130px}.chip{font-size:11px;padding:5px}.phone{grid-template-columns:1fr 1fr}}
+
+.chat{max-width:760px;margin:auto}.bubble{max-width:78%;margin:9px 0;padding:10px 12px;border-radius:13px;background:#2a2230;border:2px solid #51445b;line-height:1.25}.bubble.me{margin-left:auto;background:#26372f;border-color:#4d8064}.bubble img{display:block;width:min(330px,100%);margin-top:8px;border:2px solid #fff;border-radius:8px}
+.replyTray{display:grid;grid-template-columns:1fr;gap:9px;margin-top:18px}.reply{min-height:54px;text-align:left;background:#17131d;color:#fff;border:3px solid #76667e;border-radius:10px;padding:10px 13px;font-size:16px}.reply:active{border-color:#ff5d9e;background:#291825}
+.effectPic{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}.effectPic img{width:100%;aspect-ratio:1.5;object-fit:cover;border:3px solid #5e5265;border-radius:9px}
+.badgeDot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#ff5d9e;margin-left:6px}
 </style></head><body><div id="game">
-<div id="home" class="scene"></div><div id="badge"><span class="pink">CARBON</span>//DESIRE <span class="pink">20</span></div>
+<div id="home" class="scene"></div><div id="badge"><span class="pink">CARBON</span>//DESIRE <span class="pink">21</span></div>
 <div id="hud"><div class="chip">DAY <span id="day">1</span></div><div class="chip" id="clock">09:17</div><div class="chip">¥ <span id="money">8560</span></div></div>
 <button class="hot" id="bedHot" aria-label="bed"></button><button class="hot" id="dsHot" aria-label="3ds"></button><button class="hot" id="phoneHot" aria-label="phone"></button><button class="hot" id="pcHot" aria-label="computer"></button><button class="hot" id="doorHot" aria-label="door"></button>
 <div id="sheet" class="sheet"><div class="panel"><div class="top"><h2 id="pt">MAP</h2><button class="close" onclick="closeP()">×</button></div><div id="content"></div></div></div><div id="toast"></div></div>
 <script>
-const $=x=>document.getElementById(x);let S=JSON.parse(localStorage.getItem('cd20')||'{"day":1,"min":557,"money":8560,"mood":62,"skill":1}');
-function save(){localStorage.setItem('cd20',JSON.stringify(S));drawHud()}function drawHud(){day.textContent=S.day;let h=Math.floor(S.min/60)%24,m=S.min%60;clock.textContent=String(h).padStart(2,'0')+":"+String(m).padStart(2,'0');money.textContent=S.money}
+const $=x=>document.getElementById(x);let S=JSON.parse(localStorage.getItem('cd21')||'{"day":1,"min":557,"money":8560,"mood":62,"skill":1,"trust":{"khalid":0,"ren":0,"ayo":0},"biz":{"fitment":0,"stock":0,"promise":0},"msg":{"khalid":0,"ren":0,"ayo":0},"flags":{}}');
+function save(){localStorage.setItem('cd21',JSON.stringify(S));drawHud()}function drawHud(){day.textContent=S.day;let h=Math.floor(S.min/60)%24,m=S.min%60;clock.textContent=String(h).padStart(2,'0')+":"+String(m).padStart(2,'0');money.textContent=S.money}
 function tick(n){S.min+=n;if(S.min>=1440){S.day++;S.min%=1440}save()}function toast(t){let x=$('toast');x.textContent=t;x.style.display='block';setTimeout(()=>x.style.display='none',1100)}
 function panel(title,body){pt.textContent=title;content.innerHTML=body;sheet.classList.add('on')}function closeP(){sheet.classList.remove('on')}
 const places=[
@@ -39,14 +44,58 @@ function phone(){panel('手机',`<div class="phone">
 <div class="app" onclick="chats()"><img src="scene_phone.jpg"><b>WhatsApp · 3</b></div>
 <div class="app" onclick="gallery('照片',['parts_front.png','parts_rear.png','parts_detail.png'])"><img src="parts_front.png"><b>Photos</b></div>
 <div class="app" onclick="map()"><img src="v17_map.jpg"><b>Maps</b></div></div>`)}
-function chats(){panel('WhatsApp',`<div class="chatrow" onclick="client()"><img class="avatar" src="v17_characters.jpg"><b>Khalid<br><small>G82 · front lip?</small></b><img class="thumb" src="parts_front.png"></div>
-<div class="chatrow" onclick="workshop()"><img class="avatar" src="scene_006.jpg"><b>Ren · 006<br><small>photo</small></b><img class="thumb" src="v17_006_thumb.jpg"></div>
-<div class="chatrow"><img class="avatar" src="scene_characters.jpg"><b>Ayo<br><small>miss u...</small></b><span>♥</span></div>`)}
-function client(){panel('Khalid',`<div class="carstage"><img src="parts_front.png"><button class="zone zlip" onclick="toast('FRONT LIP ✓');S.skill++;save()"></button></div><div class="grid"><button class="tile" onclick="company()"><img src="v17_company.jpg"><b>去公司查产品 →</b></button><button class="tile" onclick="gallery('G82 产品图',['v17_parts.jpg','parts_detail.png','parts_atlas.png'])"><img src="v17_parts.jpg"><b>打开产品图</b></button></div>`)}
+function chats(){panel('WhatsApp',`<div class="chatrow" onclick="openChat('khalid')"><img class="avatar" src="v17_characters.jpg"><b>Khalid ${S.msg.khalid<2?'<span class="badgeDot"></span>':''}<br><small>${S.msg.khalid?'waiting...':'G82 · front lip?'}</small></b><img class="thumb" src="parts_front.png"></div>
+<div class="chatrow" onclick="openChat('ren')"><img class="avatar" src="scene_006.jpg"><b>Ren · 006 ${S.msg.ren<1?'<span class="badgeDot"></span>':''}<br><small>got a G63 here</small></b><img class="thumb" src="v17_006_thumb.jpg"></div>
+<div class="chatrow" onclick="openChat('ayo')"><img class="avatar" src="scene_characters.jpg"><b>Ayo ${S.msg.ayo<1?'<span class="badgeDot"></span>':''}<br><small>u disappeared again</small></b><span>♥</span></div>`)}
+function openChat(who){
+ if(who==='khalid')return khalidChat();
+ if(who==='ren')return renChat();
+ return ayoChat();
+}
+function chatShell(name,avatar,body,replies=''){panel(name,`<div class="chat">${body}<div class="replyTray">${replies}</div></div>`)}
+function pic(src){return `<img src="${src}" onclick="gallery('图片',['${src}'])">`}
+function khalidChat(){
+ let n=S.msg.khalid||0, body=`<div class="bubble">need front lip for my G82<br>dry carbon<br>${pic('parts_front.png')}ready stock?</div>`, r='';
+ if(n===0) r=`<button class="reply" onclick="replyK(1)">yes ready stock</button><button class="reply" onclick="replyK(2)">lemme check stock first</button><button class="reply" onclick="replyK(3)">send me ur car pic + year</button>`;
+ if(n===1) body+=`<div class="bubble me">${S.flags.kReply}</div><div class="bubble">${S.flags.kPath===1?'ok send price now':S.flags.kPath===2?'ok check n lmk':'2024. sending pic now.'}${S.flags.kPath===3?pic('v17_parts.jpg'):''}</div>`,r=`<button class="reply" onclick="company()">打开公司电脑查 G82 →</button><button class="reply" onclick="gallery('客户图片',['v17_parts.jpg','parts_front.png'])">看客户发来的图</button>`;
+ if(n>=2) body+=`<div class="bubble me">${S.flags.kReply}</div><div class="bubble">${S.flags.kPath===1?'?? u said ready stock':S.flags.kPath===2?'any update?':'this is my car. need exact fitment.'}</div>`,r=`<button class="reply" onclick="company()">去处理订单</button>`;
+ chatShell('Khalid', 'v17_characters.jpg',body,r)
+}
+function replyK(path){
+ S.flags.kPath=path;S.flags.kReply=path===1?'yes ready stock':path===2?'lemme check stock first':'send me ur car pic + year';
+ S.msg.khalid=1;
+ if(path===1){S.biz.promise++;} if(path===2){S.biz.stock++;S.trust.khalid++;} if(path===3){S.biz.fitment++;S.trust.khalid+=2;}
+ tick(3);save();khalidChat()
+}
+function renChat(){
+ let n=S.msg.ren||0,body=`<div class="bubble">got a G63 here<br>rear diffuser issue ${pic('parts_rear.png')}</div>`,r='';
+ if(n===0)r=`<button class="reply" onclick="replyR(1)">im coming</button><button class="reply" onclick="replyR(2)">send rear pic + exhaust</button><button class="reply" onclick="replyR(3)">tmr?</button>`;
+ else {body+=`<div class="bubble me">${S.flags.rReply}</div><div class="bubble">${S.flags.rPath===1?'k. dont be late':S.flags.rPath===2?'finally asking the right thing '+pic('v16_006.jpg'):'maybe. if the car is still here.'}</div>`;r=`<button class="reply" onclick="workshop()">去 006</button>`}
+ chatShell('Ren · 006','scene_006.jpg',body,r)
+}
+function replyR(p){S.flags.rPath=p;S.flags.rReply=p===1?'im coming':p===2?'send rear pic + exhaust':'tmr?';S.msg.ren=1;if(p===1){S.trust.ren++;tick(2)}if(p===2){S.trust.ren+=2;S.biz.fitment++}if(p===3){tick(1)}save();renChat()}
+function ayoChat(){
+ let n=S.msg.ayo||0,body=`<div class="bubble">u disappeared again</div>`,r='';
+ if(n===0)r=`<button class="reply" onclick="replyA(1)">was busy 😭</button><button class="reply" onclick="replyA(2)">u missed me?</button><button class="reply" onclick="replyA(3)">不回，关手机</button>`;
+ else body+=`<div class="bubble me">${S.flags.aReply}</div><div class="bubble">${S.flags.aPath===1?'ik. call me when ur free':S.flags.aPath===2?'maybe. dont get too excited':'—'}</div>`;
+ chatShell('Ayo','scene_characters.jpg',body,r)
+}
+function replyA(p){S.flags.aPath=p;S.flags.aReply=p===1?'was busy 😭':p===2?'u missed me?':'[没有回复]';S.msg.ayo=1;if(p===1)S.trust.ayo++;if(p===2)S.trust.ayo+=2;tick(p===3?0:4);save();ayoChat()}
 function company(){tick(20);panel('公司 · G82 实车课',`<div class="carstage"><img id="car" src="v17_parts.jpg"><button class="zone zhood" onclick="wrong('HOOD')"></button><button class="zone zgrille" onclick="wrong('GRILLE')"></button><button class="zone zlip" onclick="rightLip()"></button></div>`)}
 function wrong(x){toast(x+' · 不是这里');car.classList.add('flash');setTimeout(()=>car.classList.remove('flash'),500)}
 function rightLip(){toast('FRONT LIP ✓');tick(10);setTimeout(()=>gallery('FRONT LIP · 看图，不背定义',['parts_front.png','parts_detail.png','parts_exploded.png']),500)}
 function workshop(){tick(25);panel('006 · Ren',`<div class="grid"><button class="tile" onclick="gallery('G63 后部',['parts_rear.png','v16_006.jpg'])"><img src="v17_006_thumb.jpg"><b>升降机上的车</b></button><button class="tile" onclick="gallery('Diffuser / Rear',['parts_rear.png','parts_exploded.png'])"><img src="parts_rear.png"><b>点后部看零件</b></button></div>`)}
-function pc(){panel('电脑',`<div class="grid"><button class="tile" onclick="gallery('产品库',['v17_parts.jpg','parts_atlas.png','parts_front.png','parts_rear.png'])"><img src="v17_parts.jpg"><b>PRODUCTS</b></button><button class="tile" onclick="gallery('订单',['v17_orders.jpg','v16_orders.jpg'])"><img src="v17_orders.jpg"><b>ORDERS</b></button><button class="tile" onclick="gallery('供应 / 库存',['v17_warehouse.jpg','scene_warehouse.jpg'])"><img src="v17_warehouse.jpg"><b>STOCK</b></button></div>`)}
+function pc(){panel('电脑',`<div class="grid"><button class="tile" onclick="gallery('产品库',['v17_parts.jpg','parts_atlas.png','parts_front.png','parts_rear.png'])"><img src="v17_parts.jpg"><b>PRODUCTS</b></button><button class="tile" onclick="gallery('订单',['v17_orders.jpg','v16_orders.jpg'])"><img src="v17_orders.jpg"><b>ORDERS</b></button><button class="tile" onclick="gallery('供应 / 库存',['v17_warehouse.jpg','scene_warehouse.jpg'])"><img src="v17_warehouse.jpg"><b>STOCK</b></button><button class="tile" onclick="consequence21()"><img src="scene_phone.jpg"><b>FOLLOW-UPS</b></button></div>`)}
+
+function consequence21(){
+ let cards=[];
+ if(S.biz.promise>0)cards.push(['parts_front.png','Khalid 在追问：你已经说过 ready stock。']);
+ if(S.biz.fitment>0)cards.push(['parts_detail.png','客户开始主动给车型/照片，适配信息更完整。']);
+ if(S.biz.stock>0)cards.push(['scene_warehouse.jpg','库存核实已经进入你的工作流程。']);
+ if(S.trust.ren>1)cards.push(['v17_006_thumb.jpg','Ren 开始主动给你实车细节。']);
+ if(!cards.length)cards.push(['scene_phone.jpg','还没有产生明显后果。先回几条消息。']);
+ panel('今天留下的痕迹',`<div class="grid">${cards.map(x=>`<div class="tile"><img src="${x[0]}"><b>${x[1]}</b></div>`).join('')}</div>`)
+}
+
 bedHot.onclick=()=>{tick(480);toast('Zzz…')};dsHot.onclick=()=>{tick(30);S.mood=Math.min(100,S.mood+6);save();gallery('3DS · +心情',['scene_home.jpg','v17_home.jpg'])};phoneHot.onclick=phone;pcHot.onclick=pc;doorHot.onclick=map;drawHud();
 </script></body></html>
