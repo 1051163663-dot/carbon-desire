@@ -1,1 +1,18 @@
-{"name": "CARBON//DESIRE", "short_name": "C//D", "start_url": "./index.html", "display": "standalone", "background_color": "#0b0710", "theme_color": "#ff67ad", "orientation": "landscape", "icons": [{"src": "icons/icon.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable"}]}
+{
+  "name": "CARBON//DESIRE",
+  "short_name": "C//D",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0710",
+  "theme_color": "#ff67ad",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
